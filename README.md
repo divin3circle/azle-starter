@@ -10,7 +10,8 @@ This template sets up a full-stack application with:
 1.Clone the repository:
 
 ```bash
-   git clone https://github.com/divin3circle/azle-starter.git
+   #fork this repo
+   git clone <link-of-the-forked-repo>.git
    cd azle-starter
 ```
 

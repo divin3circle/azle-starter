@@ -112,10 +112,6 @@ echo "⚠️Remeber to input your canister-id in App.tsx!!""
 echo "ℹYour canister-id can be gotten after running dfx deploy in the backend directory"
 cd ..
 
-# initialize git repository
-git init
-git add .
-git commit -m "Initial commit with Azle backend and React frontend setup"
 
 # additional instructions to the user
 echo "==============================="

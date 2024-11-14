@@ -19,6 +19,7 @@ mkdir frontend backend
 echo "⚙️Setting up backend..."
 cd backend
 npx azle new .
+npm install
 echo "1/3 => ✅Backend setup complete!"
 cd ..
 
@@ -26,23 +27,27 @@ cd ..
 echo "👨‍💻Setting up frontend..."
 cd frontend
 npm create vite@latest . -- --template react -y
-npm install @dfinity/agent @dfinity/principal @types/node
+npm install @dfinity/agent @dfinity/principal @types/node process node-libs-browser global
 echo "2/3 => ✅Frontend setup complete!"
 
 #update app.tsx & vite.config.js
 echo "Updating files Azle backend logic..."
-echo "import React, { useState, useEffect } from 'react';
-import { Actor, HttpAgent } from '@dfinity/agent';
-import { Principal } from '@dfinity/principal';
+echo 'import { useState, useEffect } from "react";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { Principal } from "@dfinity/principal";
 
-const canisterId = Principal.fromText('your-canister-id'); // Replace with actual canister ID
+const canisterId = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai"); // Replace with actual canister ID
 
-const Greeting: React.FC = () => {
-  const [message, setMessageState] = useState<string>('Nothing here yet');
-  const [inputMessage, setInputMessage] = useState<string>('');
+const App = () => {
+  const [message, setMessageState] = useState("Nothing here yet");
+  const [inputMessage, setInputMessage] = useState("");
 
   // Initialize the HttpAgent and Actor
-  const agent = new HttpAgent({ host: 'http://127.0.0.1:4943' });
+  const agent = new HttpAgent({ host: "http://127.0.0.1:4943" });
+
+  if (process.env.NODE_ENV === "development") {
+    agent.fetchRootKey();
+  }
 
   const actor = Actor.createActor(
     ({ IDL }) => {
@@ -59,17 +64,17 @@ const Greeting: React.FC = () => {
       const messageFromCanister = await actor.getMessage();
       setMessageState(messageFromCanister);
     } catch (error) {
-      console.error('Error fetching message:', error);
+      console.error("Error fetching message:", error);
     }
   };
 
   const setMessage = async () => {
     try {
       await actor.setMessage(inputMessage);
-      setInputMessage('');
+      setInputMessage("");
       getMessage();
     } catch (error) {
-      console.error('Error setting message:', error);
+      console.error("Error setting message:", error);
     }
   };
 
@@ -80,20 +85,24 @@ const Greeting: React.FC = () => {
   return (
     <div>
       <h1>Message: {message}</h1>
-      <input type='text' value={inputMessage} onChange={(e) => setInputMessage(e.target.value)} />
+      <input
+        type="text"
+        value={inputMessage}
+        onChange={(e) => setInputMessage(e.target.value)}
+      />
       <button onClick={setMessage}>Set Message</button>
     </div>
   );
 };
 
-export default Greeting;" > src/App.tsx
+export default App; ' > src/App.jsx
 
-echo "import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+echo "import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   define: {
-    global: "globalThis",
+    global: 'globalThis',
   },
 
   plugins: [react()],

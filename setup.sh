@@ -94,14 +94,14 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Message: {message}</h1>
+    <div className="flex items-center justify-center h-screen w-full flex-col gap-4 px-4">
+      <h1 className="text-normal leading-relaxed">Message: {message}</h1>
       <input
         type="text"
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}
       />
-      <button onClick={setMessage}>Set Message</button>
+      <button onClick={setMessage} className="py-2 px-8 bg-black text-white rounded-md">Set Message</button>
     </div>
   );
 };

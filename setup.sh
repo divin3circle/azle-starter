@@ -8,30 +8,41 @@ echo "==================================="
 
 # project name
 echo "📝Enter project name: "
-read project_name
+read -p "👉" project_name
+echo "Setting up $project_name for you..."
 
+echo ""
 # main project directory
 mkdir $project_name
 cd $project_name
 mkdir frontend backend
 
 # backend setup
-echo "⚙️Setting up backend..."
+echo ""
+echo "👨‍💻 Setting up backend..."
 cd backend
 npx azle new .
 npm install
+echo ""
 echo "1/3 => ✅Backend setup complete!"
 cd ..
 
 #frontend setup
-echo "👨‍💻Setting up frontend..."
+echo ""
+echo "👨‍💻 Setting up frontend..."
 cd frontend
 npm create vite@latest . -- --template react -y
 npm install @dfinity/agent @dfinity/principal @types/node process node-libs-browser global
+# install taiwlindcss and postcss
+npm install -D tailwindcss postcss autoprefixer
+# create & modify tailwind.config.js configuration file
+npx tailwindcss init -p
+echo ""
 echo "2/3 => ✅Frontend setup complete!"
 
-#update app.tsx & vite.config.js
-echo "Updating files Azle backend logic..."
+#update app.tsx, tailwindcss config file & vite.config.js
+echo ""
+echo "📝 Updating files Azle backend logic..."
 echo 'import { useState, useEffect } from "react";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
@@ -107,7 +118,26 @@ export default defineConfig({
 
   plugins: [react()],
 }); " > vite.config.js
+
+echo "/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}; " > tailwind.config.js
+
+echo "@tailwind base;
+@tailwind components;
+@tailwind utilities; " > src/index.css
+
+echo ""
 echo "3/3 => ✅Files update complete""
+echo ""
 echo "⚠️Remeber to input your canister-id in App.tsx!!""
 echo "ℹYour canister-id can be gotten after running dfx deploy in the backend directory"
 cd ..

@@ -100,6 +100,7 @@ const App = () => {
         type="text"
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}
+        className="py-2 px-4 border border-gray-300 rounded-md"
       />
       <button onClick={setMessage} className="py-2 px-8 bg-black text-white rounded-md">Set Message</button>
     </div>

@@ -51,6 +51,7 @@ const canisterId = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai"); // Replace
 
 const App = () => {
   const [message, setMessageState] = useState("Nothing here yet");
+   const [isLoading, setIsLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
 
   // Initialize the HttpAgent and Actor
@@ -70,21 +71,27 @@ const App = () => {
     { agent, canisterId }
   );
 
-  const getMessage = async () => {
+    const getMessage = async () => {
     try {
+      setIsLoading(true);
       const messageFromCanister = await actor.getMessage();
       setMessageState(messageFromCanister);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching message:", error);
     }
   };
 
   const setMessage = async () => {
     try {
+      setIsLoading(true);
       await actor.setMessage(inputMessage);
       setInputMessage("");
       getMessage();
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error setting message:", error);
     }
   };
@@ -94,14 +101,62 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Message: {message}</h1>
-      <input
-        type="text"
-        value={inputMessage}
-        onChange={(e) => setInputMessage(e.target.value)}
-      />
-      <button onClick={setMessage}>Set Message</button>
+     <div className="relative flex items-center justify-center h-screen w-full flex-col gap-4 px-4 font-mono">
+      {isLoading && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-10">
+          <div className="text-white">Setting message...</div>
+        </div>
+      )}
+      <div className="flex flex-col items-center justify-center gap-4 mb-12">
+        <div className="flex items-center gap-2">
+          <img
+            src="https://raw.githubusercontent.com/demergent-labs/azle/main/logo/logo.svg"
+            alt="Azle Logo"
+            className="w-24 h-24"
+          />
+          <img src={viteLogo} alt="React Logo" className="w-24 h-24" />
+        </div>
+        <h1 className="text-3xl font-bold my-6">Azle + React Starter</h1>
+        <h1 className="text-xl leading-relaxed font-bold w-full text-center">
+          Message from the canister
+        </h1>
+        <h1 className="text-normal leading-relaxed w-full text-center">
+          {message}
+        </h1>
+        <input
+          type="text"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          className="py-2 px-4 border border-gray-300 rounded-md"
+        />
+        <button
+          onClick={setMessage}
+          className="py-2 px-8 bg-black text-white rounded-md"
+        >
+          Set Message
+        </button>
+      </div>
+      <h1 className="text-gray-500">
+        Start by editing{" "}
+        <span className="bg-gray-100 p-2 rounded-md font-semibold">
+          App.jsx
+        </span>{" "}
+        for frontend.
+      </h1>
+      <h1 className="text-gray-500">
+        And{" "}
+        <span className="bg-gray-100 p-2 rounded-md font-semibold">
+          index.ts
+        </span>{" "}
+        for backend(Azle).
+      </h1>
+      <a
+        href="https://github.com/divin3circle/azle-starter"
+        className="text-sm mt-8 text-blue-500 underline"
+        target="_blank"
+      >
+        Github(Documentation)
+      </a>
     </div>
   );
 };

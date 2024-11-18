@@ -18,12 +18,16 @@ cd $project_name
 mkdir frontend backend
 
 # backend setup
+cd backend
 echo ""
 echo "👨‍💻 Setting up backend..."
-cd backend
 npx azle new .
 npm install
 echo ""
+echo "∞ Starting local internet computer replica..."
+dfx start --clean --background
+dfx deploy
+CANISTER_ID=$(dfx canister id backend)
 echo "1/3 => ✅Backend setup complete!"
 cd ..
 
@@ -47,7 +51,7 @@ echo 'import { useState, useEffect } from "react";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
 
-const canisterId = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai"); // Replace with actual canister ID
+const canisterId = Principal.fromText('$CANISTER_ID');
 
 const App = () => {
   const [message, setMessageState] = useState("Nothing here yet");

@@ -15,6 +15,11 @@ echo ""
 # main project directory
 mkdir $project_name
 cd $project_name
+#setup project
+
+
+
+
 mkdir frontend backend
 
 # backend setup
